@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import Home from './components/Home'
+import BeerList from './components/BeerList'
+import { Router } from '@reach/router'
+import { useState, useEffect } from 'react'
+import * as api from './components/api'
 
 function App() {
+  const [beers, setBeers] = useState([])
+  const [selectedBeers, setSelectedBeers] = useState([])
+
+  useEffect(() => {
+    api.getBeers.then((beer) => {
+      setBeers(beer)
+    })
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Home path="/" beers={beers} />
+        <BeerList
+          path="/beers"
+          beers={beers}
+          selectedBeers={selectedBeers}
+          setSelectedBeers={setSelectedBeers}
+        />
+      </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
